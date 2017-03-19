@@ -34,14 +34,13 @@ local args = {...}
 local current
 local lower
 
-if (tonumber(args[1]) ~= nil) then
+if (tonumber(args[1]) ~= nil and tonumber(args[2]) ~= nil) then
   current = tonumber(args[1])
+  lower = tonumber(args[2])
 else
   print("Usage: digUnder (CurrentY) (LowerY)")
 end
 
-if (tonumber(args[2]) ~= nil) then
-  lower = tonumber(args[2])
-else
+if (current <= lower) then
   print("Usage: digUnder (CurrentY) (LowerY)")
 end
