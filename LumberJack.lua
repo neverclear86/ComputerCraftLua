@@ -8,6 +8,7 @@
 -- Cut Wood
 
 --#### Install API ################################################################
+APIDir = "/neverAPIs/"
 APIs = {
   inventory = "k2T2MdcU",
   stats     = "SV1QZzAH",
@@ -15,13 +16,16 @@ APIs = {
   log       = "hmv60TYF",
 }
 for k,v in pairs(APIs) do
-  if (fs.exists(k) == false) then
-    shell.run("pastebin", "get", v, k)
+  if (fs.exists(APIDir .. k) == false) then
+    shell.run("pastebin", "get", v, APIDir .. k)
   end
 end
 for k in pairs(APIs) do
-  os.loadAPI(k)
+  os.loadAPI(APIDir .. k)
 end
+
+-- Define ########################################################################
+
 
 --#### Function ###################################################################
 
