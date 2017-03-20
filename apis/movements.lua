@@ -1,12 +1,13 @@
 --[[
 --  API Name    : movements
 --  Author      : neverclear86
---  Version     : 1.5
+--  Version     : 1.6
 --
 --  Turtle Movement
 --
 -- Logs
 --  1.0(2016.06.25): Create forward(), back(), up(), down(), right(), left(), face(), goTo(), goToBase()
+--  1.6(2016.03.20): Add turnBack()
 --]]
 
 -- #### API ########################################################
@@ -86,6 +87,7 @@ end
 
 ----------------------------
 
+-- Move ==============================================================
 forward = function(n)
   local ret = true
   if (n == nil) then
@@ -147,6 +149,9 @@ down = function(n)
   return ret
 end
 
+
+-- Turn ==============================================================
+
 left = function(n)
   if (n == nil) then
     n = 1
@@ -171,6 +176,10 @@ right = function(n)
   return true
 end
 
+turnBack = function()
+  return right(2)
+end
+
 face = function(dir)
   if ((dir + 1) % 4 == direction.dir) then
     left()
@@ -181,6 +190,8 @@ face = function(dir)
   end
   return true
 end
+
+-- GoTo =================================================================
 
 goTo = function(x, y, z, orderStr)
 
