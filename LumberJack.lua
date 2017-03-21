@@ -51,7 +51,7 @@ function showHelp(errMessage)
     if (term.isColor()) then
       term.setTextColor(colors.red)
     end
-    print(errMessage)
+    print(shell.getRunningProgram() .. ":" .. errMessage)
     term.setTextColor(colors.white)
   end
   print("Usage: " .. shell.getRunningProgram() .. " [-h] [-t TreeType] depth width")
@@ -148,9 +148,12 @@ while (true) do
     end
     mov.forword()
 
-    local ret = {turtle.inspect()}
-    local isWood = ret[2].name == WOOD
-
+    for i = 1, width do
+      for j = 1, depth do
+        local ret = {turtle.inspect()}
+        local isWood = ret[2].name == WOOD
+      end
+    end
 
 
 
