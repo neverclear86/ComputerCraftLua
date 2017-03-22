@@ -8,12 +8,6 @@
 
 
 function getOpts(args, optStr)
-  -- Debug =========================
-    -- local a = {...}
-    -- local optStr = a[1]
-    -- table.remove(a, 1)
-    -- local args = a
-  -- ===============================
 
   local result = {}
   local extra = {}
@@ -62,17 +56,23 @@ function getOpts(args, optStr)
     end
   end
 
-  -- print("result = {")
-  -- for key, value in pairs(result) do
-  --   print(key .. " : " .. tostring(value))
-  -- end
-  -- print("}")
-  -- print("extra = {")
-  -- for key, value in ipairs(extra) do
-  --   print(key .. " : " .. tostring(value))
-  -- end
-  -- print("}")
-
   return result, extra
 
+end
+
+
+function getFileParent(file)
+  local rev = string.reverse(file)
+  local pos = string.find(rev, "/")
+  local rdi = string.sub(rev, pos)
+  local par = string.reverse(rdi)
+  return par
+end
+
+function getFileName(file)
+  local rev = string.reverse(file)
+  local pos = string.find(rev, "/")
+  local rfi = string.sub(rev, 1, pos)
+  local name = string.reverse(rfi)
+  return name
 end

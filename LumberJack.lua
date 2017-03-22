@@ -2,13 +2,13 @@
 -- ProgramName  : LumberJack
 -- Author       : neverclear
 -- Date         : 2017.03.19
--- Version      : 0.2.2
+-- Version      : 0.9
 -- Cut Wood!!!
 -- Birch only
 -- 敷き詰め型なら大きさ自由
 -- 途中で止まっても所定の位置に戻る
 --]]
-local VERSION = "0.2.2"
+local VERSION = "0.9"
 local AUTHOR = "neverclear"
 local PASTEBIN = "bWtaM4ab"
 
@@ -35,6 +35,10 @@ local mov = movements
 local inv = inventory
 
 -- Define ########################################################################
+local MAP_FILE = "logs/" .. ncutl.getFileName(shell.getRunningProgram()) .. ".map"
+
+
+
 local WOOD = "minecraft:log"
 
 local SAPLING = "minecraft:sapling"
@@ -55,16 +59,53 @@ function showHelp(errMessage)
     term.setTextColor(colors.white)
   end
   print("Usage: " .. shell.getRunningProgram() .. " [-h] [-t TreeType] depth width")
-  print("-h : Show help.")
+  -- print("-s : ")
   print("-t : Select tree type.")
   print("     [oak | spruce | birch | jungle]")
   print("     or [0 | 1 | 2 | 3]")
   print("     Default: BIRCH")
+  print("-h : Show help.")
   error()
 end
 
+
+
+function writeFile(fileName, mode, ...)
+  local fh = fs.open(fileName, mode)
+  for i = 1, select("#", ...) do
+    local line = select(i, ...)
+    fh.writeLine(line)
+  end
+  fh.close()
+end
+
+function readMap()
+  local fh = fs.open(MAP_FILE, "r")
+  local ret = {}
+  local line = fh.readLine()
+  while (line) do
+    table.insert(ret, tonumber(line))
+    line = fh.readLine()
+  end
+  fh.close()
+
+  return ret
+end
+
+
+
+function prompt()
+  while (true) do
+    print(">")
+    local cmd = read()
+  end
+end
+
+
 --#### Main Program ###############################################################
 local args = {...}
+
+writeFile("logs/last.cmd", "w", shell.getRunningProgram(),  unpack(args))
 
 local opts, ext = ncutl.getOpts(args, "t:uvh")
 
@@ -120,13 +161,37 @@ end
 local depth = tonumber(ext[1])
 local width = tonumber(ext[2])
 local area  = depth * width
+local mon = peripheral.wrap("top")
+if (mon) then
+  -- term.redirect(mon)
+end
+-- term.setCursorPos(1,2)
 
+--  スタートアップの処理
+
+if (fs.exists("startup")) then
+  fs.delete("startup")
+end
+shell.run("pastebin", "get", "NXjP2PRm", "startup")
+
+
+term.clear()
+term.setCursorPos(1, 1)
+term.write(shell.getRunningProgram())
 -- Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooop
+function main()
 
 while (true) do
+  local map = nil
+  if (fs.exists(MAP_FILE)) then
+    map = readMap()
+    area = depth * #map
+    print(#map)
+  end
+
   inv.compressItem()
   if (inv.getItemCountSum(SAPLING, treeType) < area) then
-    mov.turnBack()
+    mov.face(2)
     for i = 1, math.ceil(area / 64) do
       turtle.suck()
     end
@@ -135,30 +200,93 @@ while (true) do
   local isEnough
   if(inv.getItemCountSum(SAPLING, treeType) < area) then
     isEnough = false
-    print("Sapliiiiiiiiiiing!!!!!")
+    term.setCursorPos(1, 2)
+    term.clearLine()
+    term.write("Sapliiiiiiiiiiing!!!!!")
   else
     isEnough = true
   end
-  mov.turnBack()
+  mov.face(0)
 
   if (isEnough) then
+    term.setCursorPos(1, 2)
+    term.clearLine()
+    term.write("Cutting...")
 
-    if (turtle.detect()) then
-      turtle.dig()
+
+
+    mov.forward(true)
+    if (map) then
+      mov.goTo(map[1], "~", "~", "xyz", true)
+      mov.face(0)
     end
-    mov.forword()
 
-    for i = 1, width do
+    for i = 1, map and #map or width do
+      local isThere = false
       for j = 1, depth do
-        local ret = {turtle.inspect()}
-        local isWood = ret[2].name == WOOD
+        local ins = {turtle.inspect()}
+        local isWood = ins[2].name == WOOD
+        turtle.dig()
+        mov.forward(true)
+
+        local insD = {turtle.inspectDown()}
+        local isSapling = insD[2].name == SAPLING
+
+
+        if (isWood) then
+          local insUp = {turtle.inspectUp()}
+          while (insUp[2].name == WOOD) do
+            mov.up(true)
+            insUp = {turtle.inspectUp()}
+          end
+          mov.goTo("~", 0, "~", "yxz", true)
+          turtle.digDown()
+          inv.placeItem("down", SAPLING, treeType)
+        end
+
+        if (isWood or isSapling) then
+          isThere = true
+        end
+
+      end
+
+      mov.forward(true)
+
+      if (isThere and not map) then
+        writeFile(MAP_FILE, "a", mov.coordinate.x)
+      end
+
+
+      if (mov.coordinate.x + 1 < width) then
+        mov.turn[i % 2 + 1]()
+
+        if (map) then
+          mov.goTo(map[i + 1], "~", "~", "xyz", true)
+        else
+          mov.forward(true)
+        end
+        mov.turn[i % 2 + 1]()
       end
     end
 
+    mov.goToBase("yzx", true)
+    mov.face(2)
 
+    inv.dropAll("forward")
+
+    mov.face(0)
 
   end
 
-  sleep(1800)
+  for i = 600, 0, -1 do
+    term.setCursorPos(1, 2)
+    term.clearLine()
+    term.write("CT@ " .. i .. "s")
+    sleep(1)
+  end
+  -- term.cleraLine()
 
 end
+end
+
+parallel.waitForAny(main, prompt)

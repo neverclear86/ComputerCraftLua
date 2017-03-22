@@ -28,3 +28,15 @@ writeNewFile = function(filename, ...)
   end
   fh.close()
 end
+
+readFile = function(fileName)
+  local fh = fs.open(filename, "r")
+  local ret = {}
+  local line = fh.readLine()
+  while (line) do
+    table.insert(ret, line)
+    line = fh.readLine()
+  end
+
+  return ret
+end

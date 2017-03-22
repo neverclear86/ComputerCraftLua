@@ -1,7 +1,7 @@
 --[[
 --  API Name    : stats
 --  Author      : neverclear86
---  Version     : 1.0
+--  Version     : 1.1
 --
 --  Turtle and Computer's Stats Class
 --
@@ -26,6 +26,14 @@ Coordinate.new = function(_x, _y, _z)
 
   obj.getXYZ = function()
     return obj.x, obj.y, obj.z
+  end
+
+  obj.isOrigin = function()
+    local ret = false
+    if (obj.x == 0 and obj.y == 0 and obj.z == 0) then
+      ret = true
+    end
+    return ret
   end
 
   obj.updateX = function(dx)

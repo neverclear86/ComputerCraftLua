@@ -1,7 +1,7 @@
 --[[
 --  API Name    : inventory
 --  Author      : neverclear86
---  Version     : 1.2.1
+--  Version     : 1.3
 --
 --  Turtle's Inventory Controller API
 --
@@ -10,6 +10,8 @@
 --    1.1(2017.03.20): Add getItemCountSum()
 --    1.2(2017.03.20): Corresponding to item damage
 --    1.2.1(2017.03.20): Bug fixes
+--    1.2.2(2017.03.21): Bug fixes
+--    1.3(2017.03.21): Add dropAll()
 --
 --]]
 
@@ -19,12 +21,21 @@ place = {
   down    = turtle.placeDown ,
 }
 
+drop = {
+  forward = turtle.drop,
+  up      = turtle.dropUp,
+  down    = turtle.dropDown,
+}
+
+
+
+
 
 
 function isEqual(slot, itemName, itemDamage)
   local detail = turtle.getItemDetail(slot)
   local result
-  if (detail ~= nil and detail.name ~= itemName) then
+  if (detail ~= nil and detail.name == itemName) then
     if (itemDamage ~= nil) then
       if (detail.damage == itemDamage) then
         result = true
@@ -45,7 +56,7 @@ end
 function searchItemFrom(startSlot, itemName, itemDamage)
 
   local i = startSlot
-  while (i <= 16 and isEqual(i, itemName, itemDamage)) do
+  while (i <= 16 and not isEqual(i, itemName, itemDamage)) do
     i = i + 1
   end
   if (i > 16) then
@@ -64,14 +75,15 @@ end
 
 function searchItemAll(itemName, itemDamage)
   local ret = {}
-  local i = 1
+  -- local i = 1
   -- local slot = searchItemFrom(itemName, 1)
-  local slot = searchItemFrom(i, itemName, itemDamage)
+  local slot = searchItemFrom(1, itemName, itemDamage)
   while (slot ~= false and slot < 16) do
-    ret[i] = slot
+    -- ret[i] = slot
+    table.insert(ret, slot)
     -- slot = searchItemFrom(itemName, slot + 1)
     slot = searchItemFrom(slot + 1, itemName, itemDamage)
-    i = i + 1
+    -- i = i + 1
   end
   return ret
 end
@@ -101,6 +113,7 @@ function compressItem()
       end
     end
   end
+  turtle.select(1)
 end
 
 function isSpaceInventory()
@@ -126,7 +139,6 @@ function isFullInventory()
   return ret
 end
 
--- function placeItem(itemName, fud)
 function placeItem(fud, itemName, itemDamage)
   local slot = searchItem(itemName, itemDamage)
   local ret = false
@@ -136,4 +148,18 @@ function placeItem(fud, itemName, itemDamage)
     ret = true
   end
   return ret
+end
+
+
+
+-- drop
+function dropAll(fud)
+  if (fud == nil) then
+    fud = "forward"
+  end
+  for i = 1, 16 do
+    turtle.select(i)
+    drop[fud]()
+  end
+  turtle.select(1)
 end

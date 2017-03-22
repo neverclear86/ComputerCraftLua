@@ -1,13 +1,14 @@
 --[[
 --  API Name    : movements
 --  Author      : neverclear86
---  Version     : 1.6
+--  Version     : 1.7
 --
 --  Turtle Movement
 --
 -- Logs
 --  1.0(2016.06.25): Create forward(), back(), up(), down(), right(), left(), face(), goTo(), goToBase()
---  1.6(2016.03.20): Add turnBack()
+--  1.6(2017.03.20): Add turnBack()
+--  1.7(2017.03.21): isDigを指定すればdigするように対応した
 --]]
 
 -- #### API ########################################################
@@ -88,12 +89,19 @@ end
 ----------------------------
 
 -- Move ==============================================================
-forward = function(n)
+forward = function(n, isDig)
   local ret = true
-  if (n == nil) then
+  if (type(n) == "boolean") then
+    isDig = n
+  end
+  if (tonumber(n) == nil) then
     n = 1
   end
+
   for i = 1, n do
+    if (isDig) then
+      turtle.dig()
+    end
     if (turtle.forward()) then
       if (direction.dir % 2 == 0) then
         if (direction.dir == 0) then
@@ -117,12 +125,18 @@ forward = function(n)
   return ret
 end
 
-up = function(n)
+up = function(n, isDig)
   local ret = true
-  if (n == nil) then
+  if (type(n) == "boolean") then
+    isDig = n
+  end
+  if (tonumber(n) == nil) then
     n = 1
   end
   for i = 1, n do
+    if (isDig) then
+      turtle.digUp()
+    end
     if (turtle.up()) then
       coordinate.updateY(1)
       writeLocationLog()
@@ -133,12 +147,18 @@ up = function(n)
   return  ret
 end
 
-down = function(n)
+down = function(n, isDig)
   local ret = true
-  if (n == nil) then
+  if (type(n) == "boolean") then
+    isDig = n
+  end
+  if (tonumber(n) == nil) then
     n = 1
   end
   for i = 1, n do
+    if (isDig) then
+      turtle.digDown()
+    end
     if (turtle.down()) then
       coordinate.updateY(-1)
       writeLocationLog()
@@ -193,7 +213,7 @@ end
 
 -- GoTo =================================================================
 
-goTo = function(x, y, z, orderStr)
+goTo = function(x, y, z, orderStr, isDig)
 
   if (string.sub(x, 1, 1) == "~") then
     if (tonumber(string.sub(x, 2)) ~= nil) then
@@ -230,7 +250,7 @@ goTo = function(x, y, z, orderStr)
         face(1)
       end
       while (coordinate.x ~= x) do
-        forward()
+        forward(1, isDig)
       end
     elseif (string.lower(string.sub(orderStr, i, i)) == "z" and coordinate.z ~= z) then
       if (coordinate.z > z) then
@@ -239,14 +259,14 @@ goTo = function(x, y, z, orderStr)
         face(0)
       end
       while (coordinate.z ~= z) do
-        forward()
+        forward(1, isDig)
       end
     elseif (string.lower(string.sub(orderStr, i, i)) == "y" and coordinate.y ~= y) then
       while (coordinate.y ~= y) do
         if (coordinate.y > y) then
-          down()
+          down(1, isDig)
         else
-          up()
+          up(1, isDig)
         end
       end
     else
@@ -255,11 +275,11 @@ goTo = function(x, y, z, orderStr)
   end
 end
 
-goToBase = function(orderStr)
+goToBase = function(orderStr, isDig)
   if (orderStr == nil) then
     orderStr = "xyz"
   end
-  goTo(0, 0, 0, orderStr)
+  goTo(0, 0, 0, orderStr, isDig)
 
   face(0)
 end
