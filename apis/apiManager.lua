@@ -9,7 +9,9 @@
   0.1: APIのインスコとかできた
 ]]
 
+local NAME = "ApiManager"
 local VERSION = 1.0
+local CODE = ""
 
 local apiDir = "neverAPIs/"
 
@@ -20,6 +22,18 @@ local apiList = {
   log       = "hmv60TYF",
   ncutl     = "V7d5833K",
 }
+
+function getName()
+  return NAME
+end
+
+function getVersion()
+  return VERSION
+end
+
+function getCode()
+  return CODE
+end
 
 
 function getDir()
@@ -54,5 +68,23 @@ end
 function installAll()
   for k,v in pairs(apiList) do
     install(k)
+  end
+end
+
+
+function printStatus(name)
+  if exists(name) then
+    local str = "Not Installed"
+    if isInstalled(name) then
+      str = "Installed"
+    end
+
+    print(name .. " : " .. str)
+  end
+end
+
+function printStatusAll()
+  for k, v in pairs(apiList) do
+    printStatus(k)
   end
 end
