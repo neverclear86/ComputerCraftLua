@@ -1,8 +1,9 @@
 
 
-local log = { __version = 1.0 }
+log = {}
 
 log.level = "trace"
+log.file = nil
 
 --------------------------------------------------------------------------------
 
@@ -26,12 +27,19 @@ local mode = {
     name = "fatal",
   },
 }
-local levels = {}
-for i, v in ipairs(mode) do
-  levels[v.name] = i
+
+local function makeLog(level, message)
 end
 
 
 for i, v in ipairs(mode) do
+  local isOver = false
   log[v.name] = function(...)
-    if levels[log.level] > i then
+    if v.name == log.level then
+      isOver = true
+    end
+    if not isOver then
+      return
+    end
+  end
+end
