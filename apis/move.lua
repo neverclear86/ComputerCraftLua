@@ -8,56 +8,36 @@
 -- Logs
 --  1.0():
 --]]
-
 if require == nil then
   function require(filename)
     local h = fs.open(filename, "r")
     local str = h.readAll()
     h.close()
-    return loadstring(str)()
+    return assert(loadstring(str))()
   end
 end
 
-require "lon"
+local lon = require("position.lua")
 
-
-local POSITION_FILE = "/data/position.lon"
 
 --------------------------------------------------------------------------------
-local Position = {}
-
-function Position.new(x, y, z, face)
-  local this = {
-    x = x or 0,
-    y = y or 0,
-    z = z or 0,
-    face = face or 0,
-  }
-  setmetatable(this, {__index = Position})
-  return this
-end
-
-function Position:save(filename)
-  lon.save(filename, self)
-end
-
-function Position.load(filename)
-  return Position.new(lon.load(filename))
-end
-
-position = Position.load(POSITION_FILE)
+local POSITION_FILE = "/data/position.lon"
+local position = Position.load(POSITION_FILE)
 
 
 --------------------------------------------------------------------------------
 move = {}
 
-local function _move(moving, n, direction, d)
+local function _move(moving, n, direction, d, force)
   n = n or 1
   local i = 1
   while i <= n do
     if moving() then
       position[direction] = position[direction] + d
       position:save(POSITION_FILE)
+    else
+      if force then
+        
     end
   end
 end
@@ -83,16 +63,16 @@ function move.down(n)
 end
 
 move.move = {
-  0 = move.forward,
-  1 = move.back,
-  2 = move.up,
-  3 = move.down,
+  [0] = move.forward,
+  [1] = move.back,
+  [2] = move.up,
+  [3] = move.down,
 }
-setmetatable(move.move, {
-  __call = function(t, moving, n, direction, d)
-    _move(moving, n, direction, d)
-  end
-})
+-- setmetatable(move.move, {
+--   __call = function(t, moving, n, direction, d)
+--     _move(moving, n, direction, d)
+--   end
+-- })
 
 
 local function _turn(moving, n, d)
@@ -113,11 +93,13 @@ function move.left(n)
 end
 
 move.turn = {
-  0 = move.left,
-  1 = move.right,
+  [0] = move.left,
+  [1] = move.right,
 }
-setmetatable(move.turn, {
-  __call = function(t, moving, n, d)
-    _turn(moving, n, d)
-  end
-})
+-- setmetatable(move.turn, {
+--   __call = function(t, moving, n, d)
+--     _turn(moving, n, d)
+--   end
+-- })
+
+return move
