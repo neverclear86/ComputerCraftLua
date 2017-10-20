@@ -18,7 +18,7 @@ if require == nil then
 end
 
 local lon = require("position.lua")
-local logger = log or require("log.lua")
+local logger
 if log then
   logger = log
 else

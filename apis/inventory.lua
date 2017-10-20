@@ -139,27 +139,4 @@ function isFullInventory()
   return ret
 end
 
-function placeItem(fud, itemName, itemDamage)
-  local slot = searchItem(itemName, itemDamage)
-  local ret = false
-  if (slot ~= false) then
-    turtle.select(slot)
-    place[fud]()
-    ret = true
-  end
-  return ret
-end
 
-
-
--- drop
-function dropAll(fud)
-  if (fud == nil) then
-    fud = "forward"
-  end
-  for i = 1, 16 do
-    turtle.select(i)
-    drop[fud]()
-  end
-  turtle.select(1)
-end
