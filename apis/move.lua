@@ -18,12 +18,17 @@ if require == nil then
 end
 
 local lon = require("position.lua")
-
-
+local logger = log or require("log.lua")
+if log then
+  logger = log
+else
+  logger = require("log.lua")
+  logger.file = "/logs/autolog.log"
+  logger.level = "trace"
+end
 --------------------------------------------------------------------------------
 local POSITION_FILE = "/data/position.lon"
 local position = Position.load(POSITION_FILE)
-
 
 --------------------------------------------------------------------------------
 move = {}
@@ -32,12 +37,23 @@ local function _move(moving, n, direction, d, force)
   n = n or 1
   local i = 1
   while i <= n do
+    local destination = direction .. "/" .. tostring(d)
     if moving() then
       position[direction] = position[direction] + d
       position:save(POSITION_FILE)
+      logger.debug("Move to " .. destination)
     else
+      if turtle.getFuelLevel() == 0 then
+        logger.fatal("No Fuel!")
+        error()
+      end
+
       if force then
         
+        logger.debug("Digging a block at " .. destination .. " to move")
+      else
+        logger.error("I can't move because there is a block at " .. destination)
+      end
     end
   end
 end
@@ -81,6 +97,7 @@ local function _turn(moving, n, d)
     moving()
     position.direction = (position.direction + d) % 4
     position:save(POSITION_FILE)
+    logger.debug("Turn " .. d and "right" or "left")
   end
 end
 

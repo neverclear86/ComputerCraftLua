@@ -35,9 +35,11 @@ local function makeLog(level, messages)
   
   local info = debug.getinfo(3, "Sl")
   info = info.short_src .. ":" .. info.currentline
+  
 
-  return string.format("[%-6s][%s] %s: %s\n",
-    level, os.date(), info, table.concat(messages, " "))
+  local label = tostring(os.getComputerID()) .. "/" .. os.getComputerLabel() or ""
+  return string.format("[%-6s][%s][%s] %s: %s\n",
+    level, os.date(), label, info, table.concat(messages, " "))
 end
 
 
