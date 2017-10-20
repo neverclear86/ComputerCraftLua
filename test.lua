@@ -1,17 +1,14 @@
-function hogefuga()
-  hoge()
-  fuga()
-end
+require "apis/log"
 
-function hoge()
-  print("hoge")
-end
+log.level = "info"
+log.file = "logtest.log"
+log.stdout = false
 
-function fuga()
-  print("fuga")
-end
-
-
+log.trace("aaaa")
+log.debug("bbbb")
+log.info("cccc")
+log.warn("dddd")
+log.error("eeee")
+log.fatal("ffff")
 
 
-hogefuga()
