@@ -20,23 +20,23 @@ else
 end
 --------------------------------------------------------------------------------
 
-place = {}
-
-function placeItem(fud, itemName, itemDamage)
-  local slot = searchItem(itemName, itemDamage)
-  local ret = false
-  if (slot ~= false) then
-    turtle.select(slot)
-    place[fud]()
-    ret = true
-  end
-  return ret
-end
+-- place = {}
+--
+-- function placeItem(fud, itemName, itemDamage)
+--   local slot = searchItem(itemName, itemDamage)
+--   local ret = false
+--   if (slot ~= false) then
+--     turtle.select(slot)
+--     place[fud]()
+--     ret = true
+--   end
+--   return ret
+-- end
 ---------------------------------------------------------------
 ALL = true
 dig = {}
 
-local digto = {
+local digging = {
   up = turtle.digUp,
   forward = turtle.dig,
   down = turtle.digDown,
@@ -50,14 +50,14 @@ local function _dig(direction, delay, n)
   end
 
   if n == ALL then
-    while digto[direction]() do
+    while digging[direction]() do
       logger.debug("Dig " .. direction)
       sleep()
     end
   else
     n = n or 1
     for i = 1, n do
-      digto[direction]()
+      digging[direction]()
       logger.debug("Dig " .. direction .. " " .. tostring(i) .. "/" .. tostring(n))
       sleep(delay)
     end
@@ -77,3 +77,4 @@ function dig.down(n)
   _dig("down", 0, n)
 end
 
+return dig, place

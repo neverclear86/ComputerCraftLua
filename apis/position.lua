@@ -6,8 +6,7 @@ if require == nil then
     return assert(loadstring(str))()
   end
 end
-
-local lon = require("lon.lua")
+local lon = require("/apis/lon.lua")
 
 local Position = {}
 
@@ -27,7 +26,7 @@ function Position:save(filename)
 end
 
 function Position.load(filename)
-  return Position.new(lon.load(filename))
+  return Position.new(unpack(data))
 end
 
 return Position

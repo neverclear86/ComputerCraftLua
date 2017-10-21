@@ -1,4 +1,4 @@
-
+-- log4cc
 
 log = {}
 
@@ -28,31 +28,34 @@ local mode = {
   },
 }
 
+local function getinfo(level)
+  local e = {pcall(error, "", level)}
+  return e[2]
+end
+
+
 local function makeLog(level, messages)
   for i, v in ipairs(messages) do
     messages[i] = tostring(v)
   end
-  
-  local info = debug.getinfo(3, "Sl")
-  info = info.short_src .. ":" .. info.currentline
-  
 
+  local info = getinfo(5)
   local label = tostring(os.getComputerID()) .. "/" .. os.getComputerLabel() or ""
-  return string.format("[%-6s][%s][%s] %s: %s\n",
-    level, os.date(), label, info, table.concat(messages, " "))
+  return string.format("[%-6s][%.2f][%s] %s %s\n",
+    level, os.clock(), label, info, table.concat(messages, " "))
 end
 
 
 local isOver = false
 for i, v in ipairs(mode) do
+  if v.name == log.level then
+    isOver = true
+  end
   log[v.name] = function(...)
-    if v.name == log.level then
-      isOver = true
-    end
     if not isOver then
       return
     end
-    
+
     local logstr = makeLog(v.name, {...})
     if log.stdout then
       io.write(logstr)
