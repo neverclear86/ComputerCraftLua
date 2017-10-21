@@ -18,20 +18,7 @@ else
   logger.file = "/logs/autolog.log"
   logger.level = "trace"
 end
---------------------------------------------------------------------------------
 
--- place = {}
---
--- function placeItem(fud, itemName, itemDamage)
---   local slot = searchItem(itemName, itemDamage)
---   local ret = false
---   if (slot ~= false) then
---     turtle.select(slot)
---     place[fud]()
---     ret = true
---   end
---   return ret
--- end
 ---------------------------------------------------------------
 ALL = true
 dig = {}
@@ -76,5 +63,24 @@ end
 function dig.down(n)
   _dig("down", 0, n)
 end
+
+
+
+--------------------------------------------------------------------------------
+place = {}
+
+local placing = {
+  up = turtle.placeUp,
+  forward = turtle.place,
+  down = turtle.placeDown,
+}
+
+local function _place(fud)
+
+end
+
+
+
+
 
 return dig, place
