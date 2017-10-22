@@ -144,4 +144,8 @@ move.turn = {
 --   end
 -- })
 
+
+move.position = position
+
+
 return move

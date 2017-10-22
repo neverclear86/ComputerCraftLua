@@ -27,6 +27,9 @@ local mode = {
     name = "fatal",
   },
 }
+for i, v in ipairs(mode) do
+  mode[v.name] = i
+end
 
 local function getinfo(level)
   local e = {pcall(error, "", level)}
@@ -46,13 +49,9 @@ local function makeLog(level, messages)
 end
 
 
-local isOver = false
 for i, v in ipairs(mode) do
-  if v.name == log.level then
-    isOver = true
-  end
   log[v.name] = function(...)
-    if not isOver then
+    if i < mode[log.level] then
       return
     end
 

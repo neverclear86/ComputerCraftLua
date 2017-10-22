@@ -1,7 +1,7 @@
 --[[
 --  API Name    : inventory
 --  Author      : neverclear86
---  Version     : 1.3
+--  Version     : 1.4
 --
 --  Turtle's Inventory Controller API
 --
@@ -15,12 +15,14 @@
 --    1.4 (2017.10.22): Remove dropAll(), placeItem()
 --]]
 
-function isEqual(slot, itemName, itemDamage)
+inventory = {}
+
+function inventory.isEqual(slot, itemName, itemDamage)
   local detail = turtle.getItemDetail(slot)
   local result
-  if (detail ~= nil and detail.name == itemName) then
-    if (itemDamage ~= nil) then
-      if (detail.damage == itemDamage) then
+  if detail ~= nil and detail.name == itemName then
+    if itemDamage ~= nil then
+      if detail.damage == itemDamage then
         result = true
       else
         result = false
@@ -36,14 +38,14 @@ function isEqual(slot, itemName, itemDamage)
 end
 
 -- function searchItemFrom(itemName, startSlot)
-function searchItemFrom(startSlot, itemName, itemDamage)
+function inventory.searchItemFrom(startSlot, itemName, itemDamage)
 
   local i = startSlot
-  while (i <= 16 and not isEqual(i, itemName, itemDamage)) do
+  while i <= 16 and not inventory.isEqual(i, itemName, itemDamage) do
     i = i + 1
   end
-  if (i > 16) then
-    i = false
+  if i > 16 then
+    i = nil
   end
   return i
 
@@ -52,27 +54,27 @@ end
 -- function searchItem(itemName)
 --   return searchItemFrom(itemName, 1)
 -- end
-function searchItem(itemName, itemDamage)
-  return searchItemFrom(1, itemName, itemDamage)
+function inventory.searchItem(itemName, itemDamage)
+  return inventory.searchItemFrom(1, itemName, itemDamage)
 end
 
-function searchItemAll(itemName, itemDamage)
+function inventory.searchItemAll(itemName, itemDamage)
   local ret = {}
   -- local i = 1
   -- local slot = searchItemFrom(itemName, 1)
-  local slot = searchItemFrom(1, itemName, itemDamage)
-  while (slot ~= false and slot < 16) do
+  local slot = inventory.searchItemFrom(1, itemName, itemDamage)
+  while slot and slot < 16 do
     -- ret[i] = slot
     table.insert(ret, slot)
     -- slot = searchItemFrom(itemName, slot + 1)
-    slot = searchItemFrom(slot + 1, itemName, itemDamage)
+    slot = inventory.searchItemFrom(slot + 1, itemName, itemDamage)
     -- i = i + 1
   end
   return ret
 end
 
-function getItemCountSum(itemName, itemDamage)
-  local slots = searchItemAll(itemName, itemDamage)
+function inventory.getItemCountSum(itemName, itemDamage)
+  local slots = inventory.searchItemAll(itemName, itemDamage)
   local sum = 0
   for k, v in ipairs(slots) do
     sum = sum + turtle.getItemCount(v)
@@ -81,15 +83,15 @@ function getItemCountSum(itemName, itemDamage)
 end
 
 
-function compressItem()
+function inventory.compressItem()
   for i = 1, 16 do
     local item = turtle.getItemDetail(i)
     local count = turtle.getItemCount(i)
-    if (item ~= nil and count < 64) then
+    if item ~= nil and count < 64 then
       for j = i + 1, 16 do
         -- local slot = searchItemFrom(item.name, j)
         local slot = searchItemFrom(j, item.name, item.damage)
-        if (slot ~= false) then
+        if slot then
           turtle.select(slot)
           turtle.transferTo(i)
         end
@@ -99,11 +101,11 @@ function compressItem()
   turtle.select(1)
 end
 
-function isSpaceInventory()
+function inventory.isSpaceInventory()
   local slot = 1
   local ret = false
-  while (ret == false and slot <= 16) do
-    if (turtle.getItemCount(slot) == 0) then
+  while ret == false and slot <= 16 do
+    if turtle.getItemCount(slot) == 0 then
       ret = true
     end
     slot = slot + 1
@@ -111,13 +113,15 @@ function isSpaceInventory()
   return ret
 end
 
-function isFullInventory()
+function inventory.isFullInventory()
   local ret = true
-  if (isSpaceInventory() ~= true) then
-    compressItem()
-    ret = not isSpaceInventory()
+  if inventory.isSpaceInventory() ~= true then
+    inventory.compressItem()
+    ret = not inventory.isSpaceInventory()
   else
     ret = false
   end
   return ret
 end
+
+return inventory

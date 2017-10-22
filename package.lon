@@ -55,5 +55,11 @@
       version = "1.4.0",
       path = "/neverclear/apis/",
     },
+    {
+      name = "table",
+      url = "",
+      version = "1.0.0",
+      path = "/neverclear/util/"
+    }
   }
 }

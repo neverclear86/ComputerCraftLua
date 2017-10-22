@@ -53,7 +53,7 @@ end
 
 
 function dig.up(n)
-  _dig("up", 0.43, n)
+  _dig("up", 0.45, n)
 end
 
 function dig.forward(n)
@@ -75,11 +75,15 @@ local placing = {
   down = turtle.placeDown,
 }
 
-local function _place(fud)
-
+for fud, v in pairs(placing) do
+  place[fud] = function(slot)
+    if slot then
+      turtle.select(slot)
+    end
+    placing[fud]()
+    log.debug("Place from slot:", slot)
+  end
 end
-
-
 
 
 
