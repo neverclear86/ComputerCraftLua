@@ -53,7 +53,7 @@ end
 
 
 function dig.up(n)
-  _dig("up", 0.2, n)
+  _dig("up", 0.43, n)
 end
 
 function dig.forward(n)
