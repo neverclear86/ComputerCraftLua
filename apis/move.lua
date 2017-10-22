@@ -1,12 +1,12 @@
 --[[
 --  API Name    : move
---  Author      : neverclear86
---  Version     : 1.0
+--  Author      : neverclear
+--  Version     : 1.0.0
 --
 --  Turtle Movement
 --
 -- Logs
---  1.0():
+--  1.0.0 (2017.10.22): 使えるようになった
 --]]
 if require == nil then
   function require(filename)

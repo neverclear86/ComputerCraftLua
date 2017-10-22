@@ -12,25 +12,8 @@
 --    1.2.1(2017.03.20): Bug fixes
 --    1.2.2(2017.03.21): Bug fixes
 --    1.3(2017.03.21): Add dropAll()
---
+--    1.4 (2017.10.22): Remove dropAll(), placeItem()
 --]]
-
-place = {
-  forward = turtle.place ,
-  up      = turtle.placeUp ,
-  down    = turtle.placeDown ,
-}
-
-drop = {
-  forward = turtle.drop,
-  up      = turtle.dropUp,
-  down    = turtle.dropDown,
-}
-
-
-
-
-
 
 function isEqual(slot, itemName, itemDamage)
   local detail = turtle.getItemDetail(slot)
@@ -138,5 +121,3 @@ function isFullInventory()
   end
   return ret
 end
-
-
