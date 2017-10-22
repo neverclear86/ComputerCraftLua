@@ -5,19 +5,19 @@
       name = "log",
       url = "https://raw.githubusercontent.com/neverclear86/ComputerCraftLua/master/apis/log.lua",
       version = "1.0.0",
-      path = "/apis/",
+      path = "/neverclear/apis/",
     },
     {
       name = "lon",
       url = "https://raw.githubusercontent.com/neverclear86/ComputerCraftLua/master/apis/lon.lua",
       version = "1.0.0",
-      path = "/apis/",
+      path = "/neverclear/apis/",
     },
     {
       name = "block",
       url = "https://raw.githubusercontent.com/neverclear86/ComputerCraftLua/master/apis/block.lua",
       version = "1.0.0",
-      path = "/apis/",
+      path = "/neverclear/apis/",
       require = {
         "log",
       },
@@ -26,7 +26,7 @@
       name = "item",
       url = "https://raw.githubusercontent.com/neverclear86/ComputerCraftLua/master/apis/item.lua",
       version = "1.0.0",
-      path = "/apis/",
+      path = "/neverclear/apis/",
       require = {
         "log",
       },
@@ -35,7 +35,7 @@
       name = "position",
       url = "https://raw.githubusercontent.com/neverclear86/ComputerCraftLua/master/apis/position.lua",
       version = "1.0.0",
-      path = "/apis/",
+      path = "/neverclear/apis/",
       require = {
         "lon",
       },
@@ -44,7 +44,7 @@
       name = "move",
       url = "https://raw.githubusercontent.com/neverclear86/ComputerCraftLua/master/apis/move.lua",
       version = "1.0.0",
-      path = "/apis/",
+      path = "/neverclear/apis/",
       require = {
         "log", "block", "position",
       },
@@ -53,7 +53,7 @@
       name = "inventory",
       url = "https://raw.githubusercontent.com/neverclear86/ComputerCraftLua/master/apis/inventory.lua",
       version = "1.4.0",
-      path = "/apis/",
+      path = "/neverclear/apis/",
     },
   }
 }
