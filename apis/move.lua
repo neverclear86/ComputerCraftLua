@@ -17,13 +17,13 @@ if require == nil then
   end
 end
 
-local Position = require("/apis/position.lua")
-local dig = require("/apis/block.lua")
+local Position = require("/neverclear/apis/position")
+local dig = require("/neverclear/apis/block")
 local logger
 if log then
   logger = log
 else
-  logger = require("log.lua")
+  logger = require("neverclear/apis/log")
   logger.file = "/logs/autolog.log"
   logger.level = "trace"
 end

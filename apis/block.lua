@@ -14,7 +14,7 @@ local logger
 if log then
   logger = log
 else
-  logger = require("log.lua")
+  logger = require("/neverclear/apis/log")
   logger.file = "/logs/autolog.log"
   logger.level = "trace"
 end

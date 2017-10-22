@@ -6,7 +6,7 @@ if require == nil then
     return assert(loadstring(str))()
   end
 end
-local lon = require("/apis/lon.lua")
+local lon = require("/neverclear/apis/lon")
 
 local Position = {}
 
