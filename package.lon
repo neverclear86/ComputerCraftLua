@@ -69,6 +69,14 @@
       require = {
         "Table",
       },
-    }
+    },
+    {
+      name = "dig3",
+      url = "https://raw.githubusercontent.com/neverclear86/ComputerCraftLua/master/dig3.lua",
+      version = "1.0.0",
+      require = {
+        "log", "move", "block", "getopt", "inventory",
+      },
+    },
   }
 }

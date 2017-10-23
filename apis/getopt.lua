@@ -1,4 +1,4 @@
-require("Table")
+require("neverclear/util/Table")
 
 function getopt(_args, _options)
   local options = Table(_options)
