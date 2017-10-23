@@ -56,10 +56,19 @@
       path = "/neverclear/apis/",
     },
     {
-      name = "table",
-      url = "",
+      name = "Table",
+      url = "https://raw.githubusercontent.com/neverclear86/Wrapper.lua/master/classes/Table.lua",
       version = "1.0.0",
-      path = "/neverclear/util/"
+      path = "/neverclear/util/",
+    },
+    {
+      name = "getopt",
+      url = "https://raw.githubusercontent.com/neverclear86/ComputerCraftLua/master/apis/getopt.lua",
+      version = "1.0.0",
+      path = "/neverclear/util/",
+      require = {
+        "Table",
+      },
     }
   }
 }
