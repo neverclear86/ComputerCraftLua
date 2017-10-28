@@ -139,8 +139,16 @@ move.turn = {
   [1] = move.right,
 }
 
-function move.turnto()
-
+function move.face(direction)
+  if (position.face - 1) % 4 == direction then
+    return move.left()
+  else
+    if math.abs(position.face - direction) == 2 then
+      return move.uturn()
+    else
+      return move.right()
+    end
+  end
 end
 
 -- setmetatable(move.turn, {
@@ -167,12 +175,24 @@ function go(x, y, z, order, force)
   order = order or "xyz"
 
   order:gsub(".", function(c)
-
+    if goal[c] ~= 0 then
+      local m = move.forward
+      if c == "y" then
+        m = goal[c] > 0 and move.up or move.down
+      else
+        if c == "z" then
+          move.face(goal[c] > 0 and 0 or 2)
+        else
+          move.face(goal[c] > 0 and 1 or 3)
+        end
+      end
+      m(goal[c])
+    end
   end)
 end
 
 function goBase(order, force)
-
+  return go(0, 0, 0, order, force)
 end
 
 

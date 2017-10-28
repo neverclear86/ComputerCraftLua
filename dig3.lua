@@ -20,6 +20,7 @@ local getopt = require("/neverclear/util/getopt")
 
 
 local torch = "minecraft:torch"
+local cobbleStone = "minecraft:cobble_stone"
 
 
 local function digup()
@@ -34,9 +35,16 @@ local function digdown()
   dig.down(true)
 end
 
+local function dropStone()
+  while true do
+    
+  end
+end
 
 
-local function dig3(args, opt)
+
+
+local functiendon dig3(args, opt)
   local shouldUseTorch = opt.t or opt.torch
   local n = tonumber(args[1])
   for i = 1, n do
@@ -57,5 +65,5 @@ end
 
 dig3(getopt({...}, {
   t = "boolean", torch = "boolean",
-
+  holdstone = "boolean"
 }))

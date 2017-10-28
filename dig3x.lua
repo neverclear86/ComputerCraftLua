@@ -23,7 +23,10 @@ local function dig3x(args, opt)
   local width = tonumber(args[2])
 
   for i = 1, depth do
-    shell.run("dig3", i % 4 == 1 and "-t" or "", depth)
+    shell.run("dig3", i % 4 == 1 and "-t" or "", depth, unpack(opt))
+    move.turn[i % 2]()
+    move.forward(true)
+    move.turn[i % 2]()
   end
 end
 
