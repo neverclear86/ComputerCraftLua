@@ -138,11 +138,42 @@ move.turn = {
   [0] = move.left,
   [1] = move.right,
 }
+
+function move.turnto()
+
+end
+
 -- setmetatable(move.turn, {
 --   __call = function(t, moving, n, d)
 --     _turn(moving, n, d)
 --   end
 -- })
+
+
+function go(x, y, z, order, force)
+  local goal = {x = tostring(x), y = tostring(y), z = tostring(z)}
+  for k, v in goal do
+    if v:sub(1, 1) == "~" then
+      if v:len == 1 then
+        goal[k] = 0
+      else
+        goal[k] = tonumber(v:sub(2))
+      end
+    else
+      goal[k] = tonumber(v) - postion[k]
+    end
+  end
+
+  order = order or "xyz"
+
+  order:gsub(".", function(c)
+
+  end)
+end
+
+function goBase(order, force)
+
+end
 
 
 move.position = position

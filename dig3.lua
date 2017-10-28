@@ -7,16 +7,20 @@ if require == nil then
   end
 end
 
-log = require("/neverclear/apis/log")
+if not log then
+  log = require("/neverclear/apis/log")
+  log.file = "/logs/mine3.log"
+  log.level = "info"
+end
+
 local move = require("/neverclear/apis/move")
 local dig, place = require("/neverclear/apis/block")
 local inventory = require("/neverclear/apis/inventory")
 local getopt = require("/neverclear/util/getopt")
 
+
 local torch = "minecraft:torch"
 
-log.file = "/logs/mine3.log"
-log.level = "info"
 
 local function digup()
   dig.up(true)
@@ -32,11 +36,10 @@ end
 
 
 
-function main(args, opt)
+local function dig3(args, opt)
   local shouldUseTorch = opt.t or opt.torch
   local n = tonumber(args[1])
-  local i = 0
-  while i < n do
+  for i = 1, n do
     parallel.waitForAll(digup, digforward, digdown)
     log.info("dig3", i)
 
@@ -52,7 +55,7 @@ function main(args, opt)
 end
 
 
-main(getopt({...}, {
+dig3(getopt({...}, {
   t = "boolean", torch = "boolean",
 
 }))
