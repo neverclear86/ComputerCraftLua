@@ -29,7 +29,7 @@ function lon.load(filename)
     return nil
   end
   local file = fs.open(filename, "r")
-  local tbl = lon.unserialise(file.readAll())
+  local tbl = lon.unserialize(file.readAll())
   file.close()
   return tbl
 end

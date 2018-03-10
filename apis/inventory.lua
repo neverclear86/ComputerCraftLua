@@ -90,7 +90,7 @@ function inventory.compressItem()
     if item ~= nil and count < 64 then
       for j = i + 1, 16 do
         -- local slot = searchItemFrom(item.name, j)
-        local slot = searchItemFrom(j, item.name, item.damage)
+        local slot = inventory.searchItemFrom(j, item.name, item.damage)
         if slot then
           turtle.select(slot)
           turtle.transferTo(i)

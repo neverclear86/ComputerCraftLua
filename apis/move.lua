@@ -140,13 +140,15 @@ move.turn = {
 }
 
 function move.face(direction)
-  if (position.face - 1) % 4 == direction then
-    return move.left()
-  else
-    if math.abs(position.face - direction) == 2 then
-      return move.uturn()
+  if position.face ~= direction then
+    if (position.face - 1) % 4 == direction then
+      return move.left()
     else
-      return move.right()
+      if math.abs(position.face - direction) == 2 then
+        return move.uturn()
+      else
+        return move.right()
+      end
     end
   end
 end
@@ -158,17 +160,17 @@ end
 -- })
 
 
-function go(x, y, z, order, force)
+function move.go(x, y, z, order, force)
   local goal = {x = tostring(x), y = tostring(y), z = tostring(z)}
-  for k, v in goal do
+  for k, v in pairs(goal) do
     if v:sub(1, 1) == "~" then
-      if v:len == 1 then
+      if v:len() == 1 then
         goal[k] = 0
       else
         goal[k] = tonumber(v:sub(2))
       end
     else
-      goal[k] = tonumber(v) - postion[k]
+      goal[k] = tonumber(v) - position[k]
     end
   end
 
@@ -186,13 +188,13 @@ function go(x, y, z, order, force)
           move.face(goal[c] > 0 and 1 or 3)
         end
       end
-      m(goal[c])
+      m(math.abs(goal[c]), force)
     end
   end)
 end
 
-function goBase(order, force)
-  return go(0, 0, 0, order, force)
+function move.goBase(order, force)
+  return move.go(0, 0, 0, order, force)
 end
 
 
